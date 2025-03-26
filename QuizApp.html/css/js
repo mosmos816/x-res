@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quiz App</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            background-color: #f4f4f4;
+        }
+        .quiz-container {
+            width: 350px;
+            margin: 50px auto;
+            padding: 20px;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
+        }
+        h2 {
+            margin-bottom: 15px;
+        }
+        .option {
+            display: block;
+            margin: 10px 0;
+            padding: 10px;
+            width: 100%;
+            text-align: left;
+            background: #3498db;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        .option:hover {
+            background: #2980b9;
+        }
+        .next-btn {
+            margin-top: 15px;
+            background: #27ae60;
+        }
+        .next-btn:hover {
+            background: #219150;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="quiz-container">
+        <h2 id="question">Loading question...</h2>
+        <button class="option" onclick="checkAnswer(0)"></button>
+        <button class="option" onclick="checkAnswer(1)"></button>
+        <button class="option" onclick="checkAnswer(2)"></button>
+        <button class="option" onclick="checkAnswer(3)"></button>
+        <button class="option next-btn" onclick="nextQuestion()">Next</button>
+        <p id="result"></p>
+    </div>
+
+    <script>
+        const quizData = [
+            {
+                question: "What is the capital of France?",
+                options: ["Madrid", "Berlin", "Paris", "Rome"],
+                correct: 2
+            },
+            {
+                question: "What is 2 + 2?",
+                options: ["3", "4", "5", "6"],
+                correct: 1
+            },
+            {
+                question: "What is the color of the sky?",
+                options: ["Blue", "Green", "Red", "Yellow"],
+                correct: 0
+            }
+        ];
+
+        let currentQuestion = 0;
+        let score = 0;
+
+        function loadQuestion() {
+            document.getElementById("result").innerText = "";
+            let questionData = quizData[currentQuestion];
+            document.getElementById("question").innerText = questionData.question;
+            let options = document.getElementsByClassName("option");
+            for (let i = 0; i < 4; i++) {
+                options[i].innerText = questionData.options[i];
+                options[i].style.background = "#3498db";
+                options[i].disabled = false;
+            }
+        }
+
+        function checkAnswer(selected) {
+            let questionData = quizData[currentQuestion];
+            let options = document.getElementsByClassName("option");
+
+            if (selected === questionData.correct) {
+                score++;
+                options[selected].style.background = "green";
+                document.getElementById("result").innerText = "Correct!";
+            } else {
+                options[selected].style.background = "red";
+                options[questionData.correct].style.background = "green";
+                document.getElementById("result").innerText = "Wrong!";
+            }
+
+            for (let i = 0; i < 4; i++) {
+                options[i].disabled = true;
+            }
+        }
+
+        function nextQuestion() {
+            currentQuestion++;
+            if (currentQuestion < quizData.length) {
+                loadQuestion();
+            } else {
+                document.querySelector(".quiz-container").innerHTML = `<h2>Quiz Completed!</h2><p>Your Score: ${score}/${quizData.length}</p>`;
+            }
+        }
+
+        loadQuestion();
+    </script>
+
+</body>
+</html>
