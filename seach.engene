@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Search Countries</title>
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            min-height: 100vh;
+            background-color: #f5f5f5;
+            font-family: Arial, sans-serif;
+        }
+
+        .search-container {
+            position: relative;
+            margin-bottom: 10px;
+        }
+
+        .search-input {
+            width: 250px;
+            padding: 10px;
+            border: 2px solid maroon;
+            border-radius: 20px;
+            outline: none;
+            font-size: 16px;
+        }
+
+        .country-list {
+            width: 260px;
+            max-height: 200px;
+            overflow-y: auto;
+            background: white;
+            border: 1px solid maroon;
+            border-radius: 5px;
+            padding: 5px;
+            display: none;
+            position: absolute;
+            z-index: 1000;
+        }
+
+        .country-list div {
+            padding: 8px;
+            cursor: pointer;
+            border-bottom: 1px solid #ddd;
+        }
+
+        .country-list div:last-child {
+            border-bottom: none;
+        }
+
+        .country-list div:hover {
+            background-color: #f1f1f1;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="search-container">
+        <input type="text" class="search-input" placeholder="Search country..." oninput="filterCountries()">
+        <div class="country-list" id="countryList"></div>
+    </div>
+
+    <script>
+        const countries = [
+            "Afghanistan", "Albania", "Algeria", "Andorra", "Angola", "Argentina", "Armenia", "Australia", "Austria", 
+            "Azerbaijan", "Bahamas", "Bahrain", "Bangladesh", "Barbados", "Belarus", "Belgium", "Belize", "Benin", 
+            "Bhutan", "Bolivia", "Bosnia and Herzegovina", "Botswana", "Brazil", "Brunei", "Bulgaria", "Burkina Faso", 
+            "Burundi", "Cambodia", "Cameroon", "Canada", "Cape Verde", "Central African Republic", "Chad", "Chile", 
+            "China", "Colombia", "Comoros", "Congo", "Costa Rica", "Croatia", "Cuba", "Cyprus", "Czech Republic", 
+            "Denmark", "Djibouti", "Dominica", "Dominican Republic", "Ecuador", "Egypt", "El Salvador", "Equatorial Guinea", 
+            "Eritrea", "Estonia", "Eswatini", "Ethiopia", "Fiji", "Finland", "France", "Gabon", "Gambia", "Georgia", 
+            "Germany", "Ghana", "Greece", "Grenada", "Guatemala", "Guinea", "Guyana", "Haiti", "Honduras", "Hungary", 
+            "Iceland", "India", "Indonesia", "Iran", "Iraq", "Ireland", "Israel", "Italy", "Jamaica", "Japan", 
+            "Jordan", "Kazakhstan", "Kenya", "Kuwait", "Kyrgyzstan", "Laos", "Latvia", "Lebanon", "Lesotho", "Liberia", 
+            "Libya", "Lithuania", "Luxembourg", "Madagascar", "Malawi", "Malaysia", "Maldives", "Mali", "Malta", "Mauritania", 
+            "Mauritius", "Mexico", "Moldova", "Monaco", "Mongolia", "Montenegro", "Morocco", "Mozambique", "Myanmar", "Namibia", 
+            "Nauru", "Nepal", "Netherlands", "New Zealand", "Nicaragua", "Niger", "Nigeria", "North Korea", "North Macedonia", "Norway", 
+            "Oman", "Pakistan", "Palestine", "Panama", "Papua New Guinea", "Paraguay", "Peru", "Philippines", "Poland", "Portugal", 
+            "Qatar", "Romania", "Russia", "Rwanda", "Saint Kitts and Nevis", "Saint Lucia", "Samoa", "San Marino", "Saudi Arabia", "Senegal", 
+            "Serbia", "Seychelles", "Sierra Leone", "Singapore", "Slovakia", "Slovenia", "Solomon Islands", "Somalia", "South Africa", "South Korea", 
+            "South Sudan", "Spain", "Sri Lanka", "Sudan", "Suriname", "Sweden", "Switzerland", "Syria", "Taiwan", "Tajikistan", 
+            "Tanzania", "Thailand", "Timor-Leste", "Togo", "Tonga", "Trinidad and Tobago", "Tunisia", "Turkey", "Turkmenistan", "Uganda", 
+            "Ukraine", "United Arab Emirates", "United Kingdom", "United States", "Uruguay", "Uzbekistan", "Vanuatu", "Vatican City", "Venezuela", "Vietnam", 
+            "Yemen", "Zambia", "Zimbabwe"
+        ];
+
+        const searchInput = document.querySelector(".search-input");
+        const countryList = document.getElementById("countryList");
+
+        function displayCountries(filteredCountries = countries) {
+            countryList.style.display = filteredCountries.length ? "block" : "none";
+            countryList.innerHTML = filteredCountries.map(country => `<div onclick="selectCountry('${country}')">${country}</div>`).join('');
+        }
+
+        displayCountries();
+
+        function filterCountries() {
+            const searchValue = searchInput.value.toLowerCase();
+            const filteredCountries = countries.filter(country => country.toLowerCase().includes(searchValue));
+            displayCountries(filteredCountries);
+        }
+
+        function selectCountry(country) {
+            searchInput.value = country;
+            searchInput.focus();
+            filterCountries();
+        }
+
+        searchInput.addEventListener("focus", () => {
+            if (searchInput.value === "") displayCountries();
+            else filterCountries();
+        });
+
+        searchInput.addEventListener("input", filterCountries);
+
+        document.addEventListener("click", (e) => {
+            if (!searchInput.contains(e.target) && !countryList.contains(e.target)) {
+                countryList.style.display = "none";
+            }
+        });
+    </script>
+
+</body>
+</html>
